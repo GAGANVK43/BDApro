@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Country Analysis | Netflix Big Data Analytics{% endblock %}
+{% block page_title %}🌍 Geographic & Country Production Share{% endblock %}
+{% block page_subtitle %}International Content Origins, Regional Hubs & Production Volume{% endblock %}
+
+{% block content %}
+<div class="charts-grid">
+  <div class="chart-card">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title">🌍 Top Content Producing Nations</div>
+        <div class="chart-subtitle">Countries with the highest volume of movies and shows</div>
+      </div>
+    </div>
+    <div class="chart-body" style="min-height:360px;">
+      <canvas id="country-bar-chart"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title">📋 Geographic Production Matrix</div>
+        <div class="chart-subtitle">Country rankings by total output</div>
+      </div>
+    </div>
+    <div class="table-responsive" style="max-height:380px; overflow-y:auto;">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Country</th>
+            <th>Total Titles</th>
+            <th>Movies</th>
+            <th>TV Shows</th>
+          </tr>
+        </thead>
+        <tbody id="country-tbody">
+          <tr><td colspan="5" style="text-align:center; padding:20px; color:#94A3B8;">Loading countries...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/countries.js') }}"></script>
+{% endblock %}

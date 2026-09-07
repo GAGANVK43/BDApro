@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Data Pipeline & Status | Netflix Big Data Analytics{% endblock %}
+{% block page_title %}⚙️ Big Data Pipeline & Live System Status{% endblock %}
+{% block page_subtitle %}Infrastructure Health Monitoring, Ingestion Triggers & Hadoop/Hive Architecture{% endblock %}
+
+{% block content %}
+<!-- Live Component Health Grid -->
+<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:16px; margin-bottom:24px;">
+  <!-- Python Card -->
+  <div class="kpi-card blue">
+    <div class="kpi-header">
+      <span class="kpi-title">🐍 Python Processing Engine</span>
+      <span id="status-python-badge"></span>
+    </div>
+    <div style="font-size:1.1rem; font-weight:700; color:#fff; margin-bottom:4px;">Active & Running</div>
+    <div id="status-python-details" style="font-size:0.8rem; color:#94A3B8;">Checking...</div>
+  </div>
+
+  <!-- Hadoop Card -->
+  <div class="kpi-card amber">
+    <div class="kpi-header">
+      <span class="kpi-title">🐘 Apache Hadoop Engine</span>
+      <span id="status-hadoop-badge"></span>
+    </div>
+    <div style="font-size:1.1rem; font-weight:700; color:#fff; margin-bottom:4px;">Distributed Compute</div>
+    <div id="status-hadoop-details" style="font-size:0.8rem; color:#94A3B8;">Checking...</div>
+  </div>
+
+  <!-- HDFS Card -->
+  <div class="kpi-card amber">
+    <div class="kpi-header">
+      <span class="kpi-title">💾 Hadoop HDFS Storage</span>
+      <span id="status-hdfs-badge"></span>
+    </div>
+    <div style="font-size:1.1rem; font-weight:700; color:#fff; margin-bottom:4px;">Distributed File System</div>
+    <div id="status-hdfs-details" style="font-size:0.8rem; color:#94A3B8;">Checking...</div>
+  </div>
+
+  <!-- Hive Card -->
+  <div class="kpi-card amber">
+    <div class="kpi-header">
+      <span class="kpi-title">🐝 Apache Hive Warehouse</span>
+      <span id="status-hive-badge"></span>
+    </div>
+    <div style="font-size:1.1rem; font-weight:700; color:#fff; margin-bottom:4px;">SQL-on-Hadoop</div>
+    <div id="status-hive-details" style="font-size:0.8rem; color:#94A3B8;">Checking...</div>
+  </div>
+
+  <!-- MongoDB Card -->
+  <div class="kpi-card green">
+    <div class="kpi-header">
+      <span class="kpi-title">🍃 MongoDB Atlas NoSQL</span>
+      <span id="status-mongo-badge"></span>
+    </div>
+    <div style="font-size:1.1rem; font-weight:700; color:#fff; margin-bottom:4px;">Operational Data Store</div>
+    <div id="status-mongo-details" style="font-size:0.8rem; color:#94A3B8;">Checking...</div>
+  </div>
+
+  <!-- Dataset Card -->
+  <div class="kpi-card">
+    <div class="kpi-header">
+      <span class="kpi-title">📊 Netflix Dataset</span>
+      <span id="status-dataset-badge"></span>
+    </div>
+    <div style="font-size:1.1rem; font-weight:700; color:#fff; margin-bottom:4px;">CSV Catalog Lake</div>
+    <div id="status-dataset-details" style="font-size:0.8rem; color:#94A3B8;">Checking...</div>
+  </div>
+</div>
+
+<!-- Pipeline Action Control Card -->
+<div class="chart-card" style="margin-bottom:24px;">
+  <div class="chart-header">
+    <div>
+      <div class="chart-title">🚀 Pipeline Execution & Ingestion Controls</div>
+      <div class="chart-subtitle">Execute preprocessing and synchronization directly from the web interface</div>
+    </div>
+  </div>
+  <div style="display:flex; gap:14px; align-items:center; flex-wrap:wrap;">
+    <button id="btn-trigger-cleaning" class="btn btn-primary">
+      🧹 Run Python Data Cleaning Pipeline
+    </button>
+    <button id="btn-trigger-mongosync" class="btn btn-secondary">
+      📤 Sync Cleaned Data to MongoDB Atlas
+    </button>
+    <div id="pipeline-action-msg" style="font-size:0.88rem; font-weight:500;"></div>
+  </div>
+</div>
+
+<!-- End-to-End Pipeline Steps -->
+<div class="chart-card" style="margin-bottom:24px;">
+  <div class="chart-header">
+    <div>
+      <div class="chart-title">🏗️ End-to-End Big Data Architecture & Flow</div>
+      <div class="chart-subtitle">How raw entertainment datasets flow from ingestion to live visualization</div>
+    </div>
+  </div>
+
+  <div class="pipeline-step">
+    <div class="step-num">1</div>
+    <div>
+      <h4 style="color:#fff; font-size:0.95rem; margin-bottom:4px;">Raw Dataset Ingestion</h4>
+      <p style="font-size:0.82rem; color:#CBD5E1;">The platform ingests raw Netflix and movie CSV files with multi-genre lists, multi-country strings, missing directors, and raw durations.</p>
+    </div>
+  </div>
+
+  <div class="pipeline-step">
+    <div class="step-num">2</div>
+    <div>
+      <h4 style="color:#fff; font-size:0.95rem; margin-bottom:4px;">Python Data Cleansing & Deduplication (<code style="color:#06B6D4;">python/data_cleaning.py</code>)</h4>
+      <p style="font-size:0.82rem; color:#CBD5E1;">Removes duplicate titles, standardizes maturity ratings to official MPAA standards, extracts numeric durations into integers (minutes for movies, seasons for TV shows), and normalizes comma-separated fields.</p>
+    </div>
+  </div>
+
+  <div class="pipeline-step">
+    <div class="step-num">3</div>
+    <div>
+      <h4 style="color:#fff; font-size:0.95rem; margin-bottom:4px;">Hadoop HDFS Distributed Storage (<code style="color:#F59E0B;">/netflix-analytics/cleaned</code>)</h4>
+      <p style="font-size:0.82rem; color:#CBD5E1;">Cleaned dataset is uploaded to Hadoop HDFS, creating a scalable, fault-tolerant distributed data lake across nodes.</p>
+    </div>
+  </div>
+
+  <div class="pipeline-step">
+    <div class="step-num">4</div>
+    <div>
+      <h4 style="color:#fff; font-size:0.95rem; margin-bottom:4px;">Apache Hive SQL-on-Hadoop Analytics (<code style="color:#F59E0B;">hive/*.hql</code>)</h4>
+      <p style="font-size:0.82rem; color:#CBD5E1;">Hive creates external and partitioned ORC tables, executing large-scale aggregations using <code style="color:#38BDF8;">LATERAL VIEW explode(split(listed_in, ','))</code> and window growth functions.</p>
+    </div>
+  </div>
+
+  <div class="pipeline-step">
+    <div class="step-num">5</div>
+    <div>
+      <h4 style="color:#fff; font-size:0.95rem; margin-bottom:4px;">MongoDB Atlas NoSQL Store (<code style="color:#10B981;">python/load_mongodb.py</code>)</h4>
+      <p style="font-size:0.82rem; color:#CBD5E1;">Aggregated analytical results and indexed movie documents with native array fields (<code style="color:#10B981;">genres: []</code>, <code style="color:#10B981;">country: []</code>) are persisted into MongoDB Atlas.</p>
+    </div>
+  </div>
+
+  <div class="pipeline-step">
+    <div class="step-num">6</div>
+    <div>
+      <h4 style="color:#fff; font-size:0.95rem; margin-bottom:4px;">Flask REST API & Interactive UI (<code style="color:#E50914;">app.py</code> + JavaScript)</h4>
+      <p style="font-size:0.82rem; color:#CBD5E1;">Flask REST endpoints serve JSON to modern Chart.js charts, giving users responsive filtering, live status monitoring, and metadata exploration.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/pipeline.js') }}"></script>
+{% endblock %}

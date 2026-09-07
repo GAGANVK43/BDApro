@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Movie Explorer | Netflix Big Data Analytics{% endblock %}
+{% block page_title %}🔍 Interactive Movie & TV Explorer{% endblock %}
+{% block page_subtitle %}Search, Inspect Metadata, Filter Titles & Explore Deep Catalog Records{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+  <div id="movies-count-info" style="font-size:0.9rem; color:#94A3B8; font-weight:500;">
+    Loading titles...
+  </div>
+  <div id="movies-pagination" style="display:flex; gap:8px;"></div>
+</div>
+
+<!-- Movie Cards Grid -->
+<div id="movies-container" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:18px; margin-bottom:24px;">
+  <div class="spinner"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/movies.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}MongoDB Database | Netflix Big Data Analytics{% endblock %}
+{% block page_title %}🍃 MongoDB Atlas NoSQL Architecture{% endblock %}
+{% block page_subtitle %}Live Collections, Document Counts, Indexing Strategy & PyMongo Integration{% endblock %}
+
+{% block content %}
+<!-- DB Overview Cards -->
+<div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom:24px;">
+  <div class="kpi-card green">
+    <div class="kpi-header">
+      <span class="kpi-title">Connection State</span>
+      <span class="kpi-icon">📡</span>
+    </div>
+    <div id="db-conn-pill" style="margin-top:6px;">Checking...</div>
+  </div>
+
+  <div class="kpi-card blue">
+    <div class="kpi-header">
+      <span class="kpi-title">Active Database</span>
+      <span class="kpi-icon">📁</span>
+    </div>
+    <div id="db-name-val" class="kpi-value" style="font-size:1.3rem;">netflix_analytics</div>
+  </div>
+
+  <div class="kpi-card amber">
+    <div class="kpi-header">
+      <span class="kpi-title">Total Documents</span>
+      <span class="kpi-icon">📑</span>
+    </div>
+    <div id="db-total-docs" class="kpi-value" style="font-size:1.4rem;">--</div>
+  </div>
+
+  <div class="kpi-card purple">
+    <div class="kpi-header">
+      <span class="kpi-title">Masked URI Endpoint</span>
+      <span class="kpi-icon">🔒</span>
+    </div>
+    <div id="db-uri-val" style="font-size:0.75rem; color:#CBD5E1; word-break:break-all; font-family:monospace; margin-top:6px;">
+      Checking...
+    </div>
+  </div>
+</div>
+
+<!-- Collections Table -->
+<div class="chart-card" style="margin-bottom:24px;">
+  <div class="chart-header">
+    <div>
+      <div class="chart-title">📂 MongoDB Collections & Live Document Counts</div>
+      <div class="chart-subtitle">Schema design optimized for entertainment catalog indexing and aggregation</div>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Collection Name</th>
+          <th>Schema & Purpose</th>
+          <th>Document Count</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="db-collections-tbody">
+        <tr><td colspan="4" style="text-align:center; padding:20px; color:#94A3B8;">Loading collections...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- How Data Works Architecture Flow -->
+<div class="chart-card" style="margin-bottom:24px;">
+  <div class="chart-header">
+    <div>
+      <div class="chart-title">🔄 How MongoDB Operates Behind the Dashboard</div>
+      <div class="chart-subtitle">End-to-end data retrieval flow from browser to MongoDB Atlas</div>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; text-align:center; padding:10px 0;">
+    <div style="background:#0F172A; border:1px solid #334155; border-radius:8px; padding:14px;">
+      <div style="font-size:1.5rem; margin-bottom:4px;">👤</div>
+      <div style="font-weight:700; color:#fff; font-size:0.85rem;">User Interaction</div>
+      <div style="font-size:0.75rem; color:#94A3B8;">Filter or Page Select</div>
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:center; color:#E50914; font-size:1.2rem;">➔</div>
+
+    <div style="background:#0F172A; border:1px solid #334155; border-radius:8px; padding:14px;">
+      <div style="font-size:1.5rem; margin-bottom:4px;">🌐</div>
+      <div style="font-weight:700; color:#fff; font-size:0.85rem;">Flask REST API</div>
+      <div style="font-size:0.75rem; color:#94A3B8;"><code style="color:#06B6D4;">GET /api/genres</code></div>
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:center; color:#E50914; font-size:1.2rem;">➔</div>
+
+    <div style="background:#0F172A; border:1px solid #334155; border-radius:8px; padding:14px;">
+      <div style="font-size:1.5rem; margin-bottom:4px;">🍃</div>
+      <div style="font-weight:700; color:#fff; font-size:0.85rem;">MongoDB Atlas</div>
+      <div style="font-size:0.75rem; color:#94A3B8;">Aggregation Pipeline</div>
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:center; color:#E50914; font-size:1.2rem;">➔</div>
+
+    <div style="background:#0F172A; border:1px solid #334155; border-radius:8px; padding:14px;">
+      <div style="font-size:1.5rem; margin-bottom:4px;">📊</div>
+      <div style="font-weight:700; color:#fff; font-size:0.85rem;">Chart.js UI</div>
+      <div style="font-size:0.75rem; color:#94A3B8;">Dynamic Chart Rendering</div>
+    </div>
+  </div>
+</div>
+
+<!-- Sample Document Schema Card -->
+<div class="chart-card">
+  <div class="chart-header">
+    <div>
+      <div class="chart-title">📄 Sample Movie Document Schema (<code style="color:#10B981;">movies</code> Collection)</div>
+      <div class="chart-subtitle">Native array representation for multi-genre and multi-country fields</div>
+    </div>
+  </div>
+  <pre style="background:#0F172A; padding:16px; border-radius:8px; border:1px solid #334155; font-size:0.82rem; color:#38BDF8; overflow-x:auto;"><code>{
+  "_id": ObjectId("65e8a1f8b1..."),
+  "show_id": "s21",
+  "type": "Movie",
+  "title": "Inception",
+  "director": "Christopher Nolan",
+  "cast": "Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page, Tom Hardy",
+  "country": ["United States", "United Kingdom"],
+  "primary_country": "United States",
+  "release_year": 2010,
+  "rating": "PG-13",
+  "rating_score": 8.8,
+  "duration": "148 min",
+  "duration_numeric": 148,
+  "duration_unit": "Minutes",
+  "genres": ["Action & Adventure", "Sci-Fi & Fantasy", "Thrillers"],
+  "primary_genre": "Action & Adventure",
+  "description": "A thief who steals corporate secrets through dream-sharing is given the task of planting an idea."
+}</code></pre>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/database.js') }}"></script>
+{% endblock %}

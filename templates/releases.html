@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Release Trends | Netflix Big Data Analytics{% endblock %}
+{% block page_title %}📅 Historical Release & Velocity Trends{% endblock %}
+{% block page_subtitle %}Chronological Evolution, Production Velocity & Timeline Milestones{% endblock %}
+
+{% block content %}
+<div class="kpi-grid" style="grid-template-columns: 1fr 1fr; margin-bottom:20px;">
+  <div class="kpi-card amber">
+    <div class="kpi-header">
+      <span class="kpi-title">🏆 Peak Production Velocity Year</span>
+      <span class="kpi-icon">⚡</span>
+    </div>
+    <div id="milestone-peak" class="kpi-value" style="font-size:1.4rem;">--</div>
+  </div>
+
+  <div class="kpi-card blue">
+    <div class="kpi-header">
+      <span class="kpi-title">⏳ Historical Timeline Span</span>
+      <span class="kpi-icon">📜</span>
+    </div>
+    <div id="milestone-span" class="kpi-value" style="font-size:1.4rem;">--</div>
+  </div>
+</div>
+
+<div class="chart-card" style="margin-bottom:24px;">
+  <div class="chart-header">
+    <div>
+      <div class="chart-title">📅 Annual Release Trajectory</div>
+      <div class="chart-subtitle">Stacked volume of content produced per year</div>
+    </div>
+  </div>
+  <div class="chart-body" style="min-height:340px;">
+    <canvas id="release-trajectory-chart"></canvas>
+  </div>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <div>
+      <div class="chart-title">📋 Annual Velocity & Cumulative Growth Matrix</div>
+      <div class="chart-subtitle">Year-by-year production statistics</div>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Total Releases</th>
+          <th>Movies</th>
+          <th>TV Shows</th>
+          <th>Cumulative Catalog Volume</th>
+        </tr>
+      </thead>
+      <tbody id="release-tbody">
+        <tr><td colspan="5" style="text-align:center; padding:20px; color:#94A3B8;">Loading timeline...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/releases.js') }}"></script>
+{% endblock %}

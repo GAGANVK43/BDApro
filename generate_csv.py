@@ -1,0 +1,356 @@
+import csv
+from pathlib import Path
+
+raw_dir = Path("data/raw")
+raw_dir.mkdir(parents=True, exist_ok=True)
+csv_file = raw_dir / "netflix_titles.csv"
+
+headers = [
+    "show_id", "type", "title", "director", "cast", "country",
+    "date_added", "release_year", "rating", "duration", "listed_in", "description"
+]
+
+rows = [
+    [
+        "s1", "Movie", "Dick Johnson Is Dead", "Kirsten Johnson", "", "United States",
+        "September 25, 2021", 2020, "PG-13", "90 min", "Documentaries",
+        "As her father nears the end of his life filmmaker Kirsten Johnson stages his death in inventive ways."
+    ],
+    [
+        "s2", "TV Show", "Blood & Water", "", "Ama Qamata, Khosi Ngema, Gail Mabalane, Thabang Molaba", "South Africa",
+        "September 24, 2021", 2021, "TV-MA", "2 Seasons", "International TV Shows, TV Dramas, TV Mysteries",
+        "After crossing paths at a party a Cape Town teen sets out to prove whether a swimming star is her sister."
+    ],
+    [
+        "s3", "TV Show", "Ganglands", "Julien Leclercq", "Sami Bouajila, Tracy Gotoas, Samuel Jouy", "France",
+        "September 24, 2021", 2021, "TV-MA", "1 Season", "Crime TV Shows, International TV Shows, TV Action & Adventure",
+        "To protect his family from a powerful drug lord skilled thief Mehdi and his team are pulled into a turf war."
+    ],
+    [
+        "s4", "TV Show", "Jailbirds New Orleans", "", "", "United States",
+        "September 24, 2021", 2021, "TV-MA", "1 Season", "Docuseries, Reality TV",
+        "Feuds flirtations and drama go down among the incarcerated women at the Orleans Justice Center."
+    ],
+    [
+        "s5", "TV Show", "Kota Factory", "Raghav Subbu", "Mayur More, Jitendra Kumar, Ranjan Raj, Alam Khan", "India",
+        "September 24, 2021", 2021, "TV-MA", "2 Seasons", "International TV Shows, Romantic TV Shows, TV Comedies",
+        "In a city of coaching centers known to train India's finest minds an earnest student navigates campus life."
+    ],
+    [
+        "s6", "TV Show", "Midnight Mass", "Mike Flanagan", "Kate Siegel, Zach Gilford, Hamish Linklater, Henry Thomas", "United States",
+        "September 24, 2021", 2021, "TV-MA", "1 Season", "TV Dramas, TV Horror, TV Mysteries",
+        "The arrival of a charismatic young priest brings glorious miracles and renewed religious fervor to a dying town."
+    ],
+    [
+        "s7", "Movie", "My Little Pony: A New Generation", "Robert Cullen, Jose Luis Ucha", "Vanessa Hudgens, Kimiko Glenn, James Marsden", "United States",
+        "September 24, 2021", 2021, "PG", "91 min", "Children & Family Movies, Comedies",
+        "Equestria is divided. But a bright-eyed hero believes Earth Ponies Pegasi and Unicorns should be pals."
+    ],
+    [
+        "s8", "Movie", "Sankofa", "Haile Gerima", "Kofi Ghanaba, Oyafunmike Ogunlano, Alexandra Duah", "United States, Ghana, United Kingdom",
+        "September 24, 2021", 1993, "TV-MA", "125 min", "Dramas, Independent Movies, International Movies",
+        "On a photo shoot in Ghana an American model has a harrowing journey back in time."
+    ],
+    [
+        "s9", "TV Show", "The Great British Baking Show", "Andy Devonshire", "Mel Giedroyc, Sue Perkins, Mary Berry", "United Kingdom",
+        "September 24, 2021", 2021, "TV-14", "9 Seasons", "British TV Shows, Reality TV",
+        "A talented batch of amateur bakers face off in a 10-week competition whipping up their best dishes."
+    ],
+    [
+        "s10", "Movie", "The Starling", "Theodore Melfi", "Melissa McCarthy, Chris O'Dowd, Kevin Kline", "United States",
+        "September 24, 2021", 2021, "PG-13", "103 min", "Comedies, Dramas",
+        "A woman adjusting to life after a loss contends with a feisty bird that has taken over her garden."
+    ],
+    [
+        "s11", "TV Show", "Vendetta: Truth, Lies and The Mafia", "", "", "Italy",
+        "September 24, 2021", 2021, "TV-MA", "1 Season", "Crime TV Shows, Docuseries, International TV Shows",
+        "This docuseries examines the true story behind two of Sicily's most prominent anti-Mafia figures."
+    ],
+    [
+        "s12", "TV Show", "Bangkok Breaking", "Kongkiat Komesiri", "Sukollawat Kanarot, Sushar Manaying", "Thailand",
+        "September 23, 2021", 2021, "TV-MA", "1 Season", "Crime TV Shows, International TV Shows, TV Action & Adventure",
+        "Newly arrived in Bangkok a wrestler teams up with a reporter to unravel a city-wide conspiracy."
+    ],
+    [
+        "s13", "Movie", "Je Suis Karl", "Christian Schwochow", "Luna Wedler, Jannis Niewöhner, Milan Peschel", "Germany",
+        "September 23, 2021", 2021, "TV-MA", "127 min", "Dramas, International Movies",
+        "After her family is murdered in a bombing a young woman is lured into joining the very group responsible."
+    ],
+    [
+        "s14", "TV Show", "Crime Stories: India Detectives", "", "", "India",
+        "September 22, 2021", 2021, "TV-MA", "1 Season", "British TV Shows, Crime TV Shows, Docuseries",
+        "Cameras follow Bengaluru police on the job offering a rare look into four major crime investigations."
+    ],
+    [
+        "s15", "TV Show", "Dear White People", "Justin Simien", "Logan Browning, Brandon P. Bell, DeRon Horton", "United States",
+        "September 22, 2021", 2021, "TV-MA", "4 Seasons", "TV Comedies, TV Dramas",
+        "Students of color navigate the daily slights and politics of life at an Ivy League college."
+    ],
+    [
+        "s16", "Movie", "Confessions of an Invisible Girl", "Bruno Garotti", "Klara Castanho, Lucca Picon, Júlia Gomes", "Brazil",
+        "September 22, 2021", 2021, "TV-PG", "91 min", "Children & Family Movies, Comedies",
+        "When clever Tetê joins a new school she will do anything to fit in with her classmates."
+    ],
+    [
+        "s17", "Movie", "Intrusion", "Adam Salky", "Freida Pinto, Logan Marshall-Green, Robert John Burke", "United States",
+        "September 22, 2021", 2021, "TV-14", "93 min", "Thrillers",
+        "After a deadly home invasion at a couple's new dream home the traumatized wife searches for answers."
+    ],
+    [
+        "s18", "TV Show", "Jaguar", "", "Blanca Suárez, Iván Marcos, Francesc Garrido", "Spain",
+        "September 22, 2021", 2021, "TV-MA", "1 Season", "International TV Shows, Spanish-Language TV Shows, TV Action & Adventure",
+        "In the 1960s a Holocaust survivor joins a group seeking justice against Nazis who fled to Spain."
+    ],
+    [
+        "s19", "Movie", "Europe's Most Dangerous Man", "Pedro de Echave García", "", "Spain",
+        "September 22, 2021", 2020, "TV-MA", "67 min", "Documentaries, International Movies",
+        "Declassified documents shed light on the post-WWII life of Otto Skorzeny in Spain."
+    ],
+    [
+        "s20", "TV Show", "Resurrection: Ertugrul", "", "Engin Altan Düzyatan, Serdar Gökhan, Esra Bilgiç", "Turkey",
+        "September 22, 2021", 2018, "TV-14", "5 Seasons", "International TV Shows, TV Action & Adventure, TV Dramas",
+        "When a good deed endangers his clan a 13th-century Ottoman warrior agrees to fight the sultan's enemies."
+    ],
+    [
+        "s21", "Movie", "Inception", "Christopher Nolan", "Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page, Tom Hardy", "United States",
+        "September 15, 2021", 2010, "PG-13", "148 min", "Action & Adventure, Sci-Fi & Fantasy, Thrillers",
+        "A thief who steals corporate secrets through dream-sharing is given the task of planting an idea."
+    ],
+    [
+        "s22", "Movie", "The Dark Knight", "Christopher Nolan", "Christian Bale, Heath Ledger, Aaron Eckhart, Michael Caine", "United States",
+        "August 1, 2021", 2008, "PG-13", "152 min", "Action & Adventure, Dramas",
+        "When the Joker wreaks havoc on Gotham Batman must accept one of the greatest tests of his ability."
+    ],
+    [
+        "s23", "TV Show", "Stranger Things", "The Duffer Brothers", "Millie Bobby Brown, Finn Wolfhard, Winona Ryder, David Harbour", "United States",
+        "May 27, 2022", 2022, "TV-14", "4 Seasons", "Sci-Fi & Fantasy, TV Dramas, TV Horror",
+        "When a young boy vanishes a small town uncovers a mystery involving supernatural forces."
+    ],
+    [
+        "s24", "TV Show", "Squid Game", "Hwang Dong-hyuk", "Lee Jung-jae, Park Hae-soo, Wi Ha-jun, Jung Ho-yeon", "South Korea",
+        "September 17, 2021", 2021, "TV-MA", "1 Season", "International TV Shows, TV Dramas, TV Thrillers",
+        "Hundreds of cash-strapped players accept a strange invitation to compete in children's games with deadly stakes."
+    ],
+    [
+        "s25", "Movie", "Roma", "Alfonso Cuarón", "Yalitza Aparicio, Marina de Tavira, Diego Cortina Autrey", "Mexico",
+        "December 14, 2018", 2018, "R", "135 min", "Dramas, Independent Movies, International Movies",
+        "A year in the life of a middle-class family's maid in Mexico City in the early 1970s."
+    ],
+    [
+        "s26", "Movie", "Interstellar", "Christopher Nolan", "Matthew McConaughey, Anne Hathaway, Jessica Chastain", "United States",
+        "December 1, 2020", 2014, "PG-13", "169 min", "Action & Adventure, Dramas, Sci-Fi & Fantasy",
+        "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival."
+    ],
+    [
+        "s27", "TV Show", "Money Heist", "Álex Pina", "Úrsula Corberó, Álvaro Morte, Itziar Ituño, Pedro Alonso", "Spain",
+        "December 3, 2021", 2021, "TV-MA", "5 Seasons", "Crime TV Shows, International TV Shows, Spanish-Language TV Shows",
+        "An unusual group of robbers attempt to carry out the most perfect robbery in Spanish history."
+    ],
+    [
+        "s28", "Movie", "Spirited Away", "Hayao Miyazaki", "Rumi Hiiragi, Miyu Irino, Mari Natsuki", "Japan",
+        "March 1, 2020", 2001, "PG", "125 min", "Anime Features, Children & Family Movies, Sci-Fi & Fantasy",
+        "A 10-year-old girl wanders into a world ruled by gods witches and spirits."
+    ],
+    [
+        "s29", "TV Show", "Breaking Bad", "Vince Gilligan", "Bryan Cranston, Aaron Paul, Anna Gunn, Dean Norris", "United States",
+        "August 2, 2013", 2013, "TV-MA", "5 Seasons", "Crime TV Shows, TV Dramas, TV Thrillers",
+        "A chemistry teacher diagnosed with cancer turns to manufacturing methamphetamine with a former student."
+    ],
+    [
+        "s30", "Movie", "Parasite", "Bong Joon Ho", "Song Kang-ho, Lee Sun-kyun, Cho Yeo-jeong, Choi Woo-shik", "South Korea",
+        "October 11, 2019", 2019, "R", "132 min", "Comedies, Dramas, International Movies, Thrillers",
+        "Greed and class discrimination threaten the symbiotic relationship between two contrasting families."
+    ],
+    [
+        "s31", "Movie", "The Irishman", "Martin Scorsese", "Robert De Niro, Al Pacino, Joe Pesci, Harvey Keitel", "United States",
+        "November 27, 2019", 2019, "R", "209 min", "Crime TV Shows, Dramas",
+        "Hit man Frank Sheeran looks back at the secrets he kept as a loyal member of the Bufalino family."
+    ],
+    [
+        "s32", "Movie", "Extraction", "Sam Hargrave", "Chris Hemsworth, Rudhraksh Jaiswal, Randeep Hooda", "United States",
+        "April 24, 2020", 2020, "R", "117 min", "Action & Adventure",
+        "A hardened mercenary's mission becomes a race to survive when sent to rescue a kidnapped son."
+    ],
+    [
+        "s33", "Movie", "Bird Box", "Susanne Bier", "Sandra Bullock, Trevante Rhodes, John Malkovich", "United States",
+        "December 21, 2018", 2018, "R", "124 min", "Dramas, Sci-Fi & Fantasy, Thrillers",
+        "Years after an unseen presence drives society to suicide a mother and children seek sanctuary."
+    ],
+    [
+        "s34", "TV Show", "Dark", "Baran bo Odar", "Louis Hofmann, Oliver Masucci, Jördis Triebel", "Germany",
+        "June 27, 2020", 2020, "TV-MA", "3 Seasons", "Crime TV Shows, International TV Shows, TV Dramas, TV Sci-Fi & Fantasy",
+        "A family saga with a supernatural twist set in a German town with mysterious disappearances."
+    ],
+    [
+        "s35", "Movie", "Marriage Story", "Noah Baumbach", "Scarlett Johansson, Adam Driver, Laura Dern", "United States",
+        "December 6, 2019", 2019, "R", "137 min", "Comedies, Dramas, Independent Movies",
+        "An incisive and compassionate look at a marriage breaking up and a family staying together."
+    ],
+    [
+        "s36", "TV Show", "The Crown", "Peter Morgan", "Claire Foy, Olivia Colman, Imelda Staunton, Matt Smith", "United Kingdom",
+        "November 15, 2020", 2020, "TV-MA", "4 Seasons", "British TV Shows, TV Dramas, TV Historical",
+        "Follows the political rivalries and romance of Queen Elizabeth II's reign."
+    ],
+    [
+        "s37", "Movie", "Red Notice", "Rawson Marshall Thurber", "Dwayne Johnson, Ryan Reynolds, Gal Gadot", "United States",
+        "November 12, 2021", 2021, "PG-13", "118 min", "Action & Adventure, Comedies",
+        "An FBI profiler pursuing the world's most wanted art thief becomes his reluctant partner."
+    ],
+    [
+        "s38", "Movie", "Dangal", "Nitesh Tiwari", "Aamir Khan, Sakshi Tanwar, Fatima Sana Shaikh", "India",
+        "June 21, 2017", 2016, "TV-PG", "161 min", "Action & Adventure, Dramas, International Movies, Sports Movies",
+        "A former wrestler trains his daughters to win gold at the Commonwealth Games."
+    ],
+    [
+        "s39", "TV Show", "Sacred Games", "Vikramaditya Motwane", "Saif Ali Khan, Nawazuddin Siddiqui, Radhika Apte", "India",
+        "August 15, 2019", 2019, "TV-MA", "2 Seasons", "Crime TV Shows, International TV Shows, TV Dramas, TV Thrillers",
+        "A link in their pasts leads an honest cop to a fugitive gang boss trying to save Mumbai."
+    ],
+    [
+        "s40", "TV Show", "The Queen's Gambit", "Scott Frank", "Anya Taylor-Joy, Bill Camp, Marielle Heller", "United States",
+        "October 23, 2020", 2020, "TV-MA", "1 Season", "TV Dramas",
+        "Orphaned at nine prodigious introvert Beth Harmon discovers and masters the game of chess."
+    ],
+    [
+        "s41", "Movie", "The Social Dilemma", "Jeff Orlowski", "Skyler Gisondo, Kara Hayward, Vincent Kartheiser", "United States",
+        "September 9, 2020", 2020, "PG-13", "94 min", "Documentaries",
+        "Explores the dangerous human impact of social networking with tech experts sounding the alarm."
+    ],
+    [
+        "s42", "Movie", "Klaus", "Sergio Pablos", "Jason Schwartzman, J.K. Simmons, Rashida Jones", "Spain",
+        "November 15, 2019", 2019, "PG", "98 min", "Children & Family Movies, Comedies",
+        "A selfish postman and a reclusive toymaker form an unlikely friendship delivering joy."
+    ],
+    [
+        "s43", "Movie", "RRR", "S.S. Rajamouli", "N.T. Rama Rao Jr., Ram Charan, Ajay Devgn, Alia Bhatt", "India",
+        "May 20, 2022", 2022, "TV-MA", "187 min", "Action & Adventure, Dramas, International Movies",
+        "A fearless warrior on a perilous mission clashes with a steely cop in pre-independent India."
+    ],
+    [
+        "s44", "TV Show", "Demon Slayer", "Haruo Sotozaki", "Natsuki Hanae, Akari Kito, Hiro Shimono", "Japan",
+        "January 22, 2021", 2021, "TV-14", "2 Seasons", "Anime Series, International TV Shows",
+        "Tanjiro sets out on a perilous journey to find a cure for his demon sister."
+    ],
+    [
+        "s45", "Movie", "Don't Look Up", "Adam McKay", "Leonardo DiCaprio, Jennifer Lawrence, Meryl Streep", "United States",
+        "December 24, 2021", 2021, "R", "138 min", "Comedies, Dramas, Sci-Fi & Fantasy",
+        "Two astronomers go on a giant media tour to warn mankind of an approaching comet."
+    ],
+    [
+        "s46", "TV Show", "Narcos", "Carlo Bernard", "Wagner Moura, Pedro Pascal, Boyd Holbrook", "United States",
+        "September 1, 2017", 2017, "TV-MA", "3 Seasons", "Crime TV Shows, TV Action & Adventure, TV Dramas",
+        "A chronicle of the war against drug cartels and the rise and fall of Pablo Escobar."
+    ],
+    [
+        "s47", "Movie", "Guillermo del Toro's Pinocchio", "Guillermo del Toro", "Ewan McGregor, David Bradley, Gregory Mann", "United States",
+        "December 9, 2022", 2022, "PG", "117 min", "Animation, Children & Family Movies, Dramas",
+        "Reinvents the classic story of a wooden puppet brought to life in stop-motion."
+    ],
+    [
+        "s48", "Movie", "Glass Onion", "Rian Johnson", "Daniel Craig, Edward Norton, Janelle Monáe", "United States",
+        "December 23, 2022", 2022, "PG-13", "140 min", "Comedies, Crime Movies, Dramas",
+        "Detective Benoit Blanc heads to Greece to peel back the layers of a mystery."
+    ],
+    [
+        "s49", "TV Show", "Wednesday", "Tim Burton", "Jenna Ortega, Gwendoline Christie, Riki Lindhome", "United States",
+        "November 23, 2022", 2022, "TV-14", "1 Season", "TV Comedies, TV Mysteries, TV Sci-Fi & Fantasy",
+        "Wednesday Addams investigates a murder spree while making friends and foes at Nevermore."
+    ],
+    [
+        "s50", "TV Show", "Cyberpunk: Edgerunners", "Hiroyuki Imaishi", "KENN, Aoi Yuuki, Hiroki Touchi", "Japan",
+        "September 13, 2022", 2022, "TV-MA", "1 Season", "Action & Adventure, Anime Series, Sci-Fi & Fantasy",
+        "A street kid trying to survive in a body-modification obsessed city becomes an outlaw."
+    ],
+    [
+        "s51", "Movie", "All Quiet on the Western Front", "Edward Berger", "Felix Kammerer, Albrecht Schuch", "Germany",
+        "October 28, 2022", 2022, "R", "148 min", "Action & Adventure, Dramas, International Movies",
+        "A young soldier on the Western Front faces the grim reality of life in the trenches."
+    ],
+    [
+        "s52", "TV Show", "Alice in Borderland", "Shinsuke Sato", "Kento Yamazaki, Tao Tsuchiya", "Japan",
+        "December 22, 2022", 2022, "TV-MA", "2 Seasons", "International TV Shows, TV Action & Adventure, TV Sci-Fi & Fantasy",
+        "An aimless gamer finds himself in a parallel Tokyo competing in sadistic games to survive."
+    ],
+    [
+        "s53", "Movie", "Enola Holmes", "Harry Bradbeer", "Millie Bobby Brown, Henry Cavill, Sam Claflin", "United Kingdom",
+        "September 23, 2020", 2020, "PG-13", "124 min", "Action & Adventure, Children & Family Movies, Comedies",
+        "Searching for her mother teen Enola Holmes uses sleuthing skills to outsmart big brother Sherlock."
+    ],
+    [
+        "s54", "TV Show", "Lupin", "George Kay", "Omar Sy, Ludivine Sagnier, Clotilde Hesme", "France",
+        "June 11, 2021", 2021, "TV-MA", "2 Seasons", "Crime TV Shows, International TV Shows, TV Dramas",
+        "Gentleman thief Assane Diop sets out to avenge his father for an injustice."
+    ],
+    [
+        "s55", "TV Show", "Peaky Blinders", "Steven Knight", "Cillian Murphy, Sam Neill, Helen McCrory", "United Kingdom",
+        "June 10, 2022", 2022, "TV-MA", "6 Seasons", "British TV Shows, Crime TV Shows, TV Dramas",
+        "A gang in 1919 Birmingham is led by the fierce Tommy Shelby moving up in the world."
+    ],
+    [
+        "s56", "Movie", "3 Idiots", "Rajkumar Hirani", "Aamir Khan, Kareena Kapoor, R. Madhavan, Sharman Joshi", "India",
+        "August 1, 2019", 2009, "PG-13", "164 min", "Comedies, Dramas, International Movies, Romantic Movies",
+        "Two friends search for their long-lost companion recalling memories of college days."
+    ],
+    [
+        "s57", "TV Show", "Cobra Kai", "Josh Heald", "Ralph Macchio, William Zabka, Xolo Maridueña", "United States",
+        "September 9, 2022", 2022, "TV-14", "5 Seasons", "TV Action & Adventure, TV Comedies, TV Dramas",
+        "Decades after the tournament rivalry reignites between Johnny and Daniel."
+    ],
+    [
+        "s58", "Movie", "The Adam Project", "Shawn Levy", "Ryan Reynolds, Mark Ruffalo, Jennifer Garner", "United States",
+        "March 11, 2022", 2022, "PG-13", "106 min", "Action & Adventure, Children & Family Movies, Sci-Fi & Fantasy",
+        "Time-traveling fighter pilot Adam Reed teams up with his 12-year-old self."
+    ],
+    [
+        "s59", "TV Show", "Ozark", "Bill Dubuque", "Jason Bateman, Laura Linney, Julia Garner", "United States",
+        "April 29, 2022", 2022, "TV-MA", "4 Seasons", "Crime TV Shows, TV Dramas, TV Thrillers",
+        "A financial adviser drags his family to the Missouri Ozarks to launder 500 million dollars."
+    ],
+    [
+        "s60", "TV Show", "Lucifer", "Tom Kapinos", "Tom Ellis, Lauren German, Kevin Alejandro", "United States",
+        "September 10, 2021", 2021, "TV-14", "6 Seasons", "Crime TV Shows, TV Comedies, TV Sci-Fi & Fantasy",
+        "Bored with being the Lord of Hell the devil relocates to Los Angeles to assist police."
+    ],
+    [
+        "s61", "Movie", "Society of the Snow", "J.A. Bayona", "Enzo Vogrincic, Agustín Pardella", "Spain",
+        "January 4, 2024", 2023, "R", "144 min", "Action & Adventure, Dramas, International Movies",
+        "In 1972 a rugby team's flight crashes into a glacier in the heart of the Andes."
+    ],
+    [
+        "s62", "TV Show", "One Piece", "Matt Owens", "Iñaki Godoy, Emily Rudd, Mackenyu", "United States",
+        "August 31, 2023", 2023, "TV-14", "1 Season", "Action & Adventure, TV Comedies, TV Sci-Fi & Fantasy",
+        "Young pirate Monkey D. Luffy goes on an epic voyage for treasure in this live-action adaptation."
+    ],
+    [
+        "s63", "Movie", "The Boy and the Heron", "Hayao Miyazaki", "Soma Santoki, Masaki Suda", "Japan",
+        "October 7, 2023", 2023, "PG-13", "124 min", "Anime Features, Children & Family Movies, Sci-Fi & Fantasy",
+        "A 12-year-old boy follows a mysterious gray heron into a world shared by the living and the dead."
+    ],
+    [
+        "s64", "Movie", "Leave the World Behind", "Sam Esmail", "Julia Roberts, Mahershala Ali, Ethan Hawke", "United States",
+        "December 8, 2023", 2023, "R", "141 min", "Dramas, Sci-Fi & Fantasy, Thrillers",
+        "A family's quiet getaway is upended when two strangers arrive bearing news of a cyberattack."
+    ],
+    [
+        "s65", "TV Show", "The Witcher", "Lauren Schmidt Hissrich", "Henry Cavill, Anya Chalotra, Freya Allan", "United States",
+        "July 27, 2023", 2023, "TV-MA", "3 Seasons", "Action & Adventure, TV Dramas, TV Sci-Fi & Fantasy",
+        "Geralt of Rivia a mutated monster-hunter journeys toward his destiny."
+    ],
+    [
+        "s66", "TV Show", "Heartstopper", "Alice Oseman", "Joe Locke, Kit Connor, William Gao", "United Kingdom",
+        "August 3, 2023", 2023, "TV-14", "2 Seasons", "British TV Shows, Romantic TV Shows, TV Dramas",
+        "Teens Charlie and Nick discover their unlikely friendship might be something more."
+    ],
+    [
+        "s67", "Movie", "Nimona", "Nick Bruno, Troy Quane", "Chloë Grace Moretz, Riz Ahmed", "United States",
+        "June 30, 2023", 2023, "PG", "101 min", "Action & Adventure, Children & Family Movies, Comedies",
+        "A knight framed for a crime is helped by a mischievous shapeshifting teen."
+    ]
+]
+
+with open(csv_file, "w", newline="", encoding="utf-8") as f:
+    writer = csv.writer(f, quoting=csv.QUOTE_MINIMAL)
+    writer.writerow(headers)
+    writer.writerows(rows)
+
+print(f"Generated {len(rows)} properly quoted records into {csv_file}")

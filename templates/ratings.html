@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Rating Analysis | Netflix Big Data Analytics{% endblock %}
+{% block page_title %}⭐ Maturity & Content Rating Patterns{% endblock %}
+{% block page_subtitle %}Classification Breakdown, Age Suitability & Audience Segmentation{% endblock %}
+
+{% block content %}
+<div class="charts-grid">
+  <div class="chart-card">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title">🥧 Proportional Rating Share</div>
+        <div class="chart-subtitle">Percentage breakdown of catalog by maturity level</div>
+      </div>
+    </div>
+    <div class="chart-body">
+      <canvas id="rating-pie-chart"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title">📊 Format Distribution per Rating</div>
+        <div class="chart-subtitle">Comparison of Movies vs TV Shows per classification</div>
+      </div>
+    </div>
+    <div class="chart-body">
+      <canvas id="rating-share-chart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="chart-card" style="margin-bottom:24px;">
+  <div class="chart-header">
+    <div>
+      <div class="chart-title">📋 Rating Distribution Summary</div>
+      <div class="chart-subtitle">Total volume and percentage share</div>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Rating</th>
+          <th>Total Titles</th>
+          <th>Movies</th>
+          <th>TV Shows</th>
+          <th>Catalog Share (%)</th>
+        </tr>
+      </thead>
+      <tbody id="rating-tbody">
+        <tr><td colspan="5" style="text-align:center; padding:20px; color:#94A3B8;">Loading ratings...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="chart-card">
+  <div class="chart-title" style="margin-bottom:12px;">📘 Maturity Standards Reference Guide</div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
+    <div style="background:#0F172A; padding:14px; border-radius:8px; border:1px solid #334155;">
+      <span class="badge" style="background:#EF4444; color:#fff; margin-bottom:6px;">TV-MA / R / NC-17</span>
+      <p style="font-size:0.8rem; color:#CBD5E1;">Mature Audience Only. Unsuitable for viewers under 17/18 years.</p>
+    </div>
+    <div style="background:#0F172A; padding:14px; border-radius:8px; border:1px solid #334155;">
+      <span class="badge" style="background:#F59E0B; color:#fff; margin-bottom:6px;">TV-14 / PG-13</span>
+      <p style="font-size:0.8rem; color:#CBD5E1;">Parents Strongly Cautioned. May be unsuitable for children under 13/14.</p>
+    </div>
+    <div style="background:#0F172A; padding:14px; border-radius:8px; border:1px solid #334155;">
+      <span class="badge" style="background:#06B6D4; color:#fff; margin-bottom:6px;">TV-PG / PG</span>
+      <p style="font-size:0.8rem; color:#CBD5E1;">Parental Guidance Suggested. Some material may not be suitable for young children.</p>
+    </div>
+    <div style="background:#0F172A; padding:14px; border-radius:8px; border:1px solid #334155;">
+      <span class="badge" style="background:#10B981; color:#fff; margin-bottom:6px;">TV-Y / TV-G / G</span>
+      <p style="font-size:0.8rem; color:#CBD5E1;">General Audience & Children. Appropriate for all age groups.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/ratings.js') }}"></script>
+{% endblock %}

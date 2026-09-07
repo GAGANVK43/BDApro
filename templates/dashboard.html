@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}Executive Dashboard | Netflix Big Data Analytics{% endblock %}
+{% block page_title %}Executive Analytics Dashboard{% endblock %}
+{% block page_subtitle %}High-Level Catalog Performance, Genre Dominance & Historical Trends{% endblock %}
+
+{% block content %}
+<!-- Top KPI Metric Cards -->
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-header">
+      <span class="kpi-title">Total Content</span>
+      <span class="kpi-icon">🎬</span>
+    </div>
+    <div id="kpi-total" class="kpi-value">--</div>
+  </div>
+
+  <div class="kpi-card blue">
+    <div class="kpi-header">
+      <span class="kpi-title">Movies</span>
+      <span class="kpi-icon">🎥</span>
+    </div>
+    <div id="kpi-movies" class="kpi-value">--</div>
+  </div>
+
+  <div class="kpi-card green">
+    <div class="kpi-header">
+      <span class="kpi-title">TV Shows</span>
+      <span class="kpi-icon">📺</span>
+    </div>
+    <div id="kpi-tv" class="kpi-value">--</div>
+  </div>
+
+  <div class="kpi-card amber">
+    <div class="kpi-header">
+      <span class="kpi-title">Avg Rating</span>
+      <span class="kpi-icon">⭐</span>
+    </div>
+    <div id="kpi-rating" class="kpi-value">--</div>
+  </div>
+
+  <div class="kpi-card purple">
+    <div class="kpi-header">
+      <span class="kpi-title">Countries</span>
+      <span class="kpi-icon">🌍</span>
+    </div>
+    <div id="kpi-countries" class="kpi-value">--</div>
+  </div>
+
+  <div class="kpi-card">
+    <div class="kpi-header">
+      <span class="kpi-title">Genres</span>
+      <span class="kpi-icon">🎭</span>
+    </div>
+    <div id="kpi-genres" class="kpi-value">--</div>
+  </div>
+</div>
+
+<!-- Dynamic Insights Banner -->
+<div class="insight-banner">
+  <span class="insight-icon">💡</span>
+  <div id="insight-text">Analyzing dataset and generating real-time dynamic insights...</div>
+</div>
+
+<!-- Row 1 Charts: Genre Distribution & Release Velocity -->
+<div class="charts-grid">
+  <div class="chart-card">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title">🎭 Top Genre Distribution</div>
+        <div class="chart-subtitle">Most represented genres across filtered catalog</div>
+      </div>
+    </div>
+    <div class="chart-body">
+      <canvas id="chart-genre"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title">📅 Annual Release Trajectory</div>
+        <div class="chart-subtitle">Volume of Movies vs TV Shows over release years</div>
+      </div>
+    </div>
+    <div class="chart-body">
+      <canvas id="chart-release"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Row 2 Charts: Movie vs TV Donut & Rating Distribution -->
+<div class="charts-grid">
+  <div class="chart-card">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title">🍩 Movie vs. TV Show Ratio</div>
+        <div class="chart-subtitle">Catalog composition format breakdown</div>
+      </div>
+    </div>
+    <div class="chart-body">
+      <canvas id="chart-donut"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title">🎯 Maturity Rating Breakdown</div>
+        <div class="chart-subtitle">Distribution of content rating classifications</div>
+      </div>
+    </div>
+    <div class="chart-body">
+      <canvas id="chart-rating"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Row 3 Charts: Country Distribution & Catalog Growth -->
+<div class="charts-grid">
+  <div class="chart-card">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title">🌍 Top Content Producing Nations</div>
+        <div class="chart-subtitle">Countries contributing the highest volume of titles</div>
+      </div>
+    </div>
+    <div class="chart-body">
+      <canvas id="chart-country"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title">📈 Cumulative Catalog Expansion</div>
+        <div class="chart-subtitle">Longitudinal growth of platform content over time</div>
+      </div>
+    </div>
+    <div class="chart-body">
+      <canvas id="chart-growth"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Row 4: Top Rated Movies Table -->
+<div class="chart-card" style="margin-bottom:24px;">
+  <div class="chart-header">
+    <div>
+      <div class="chart-title">🏆 Top-Rated & Acclaimed Titles</div>
+      <div class="chart-subtitle">Highest rated productions sorted by calculated quality score</div>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Format</th>
+          <th>Year</th>
+          <th>Maturity</th>
+          <th>Rating Score</th>
+          <th>Primary Genre</th>
+          <th>Country</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
+      <tbody id="top-movies-tbody">
+        <tr><td colspan="8" style="text-align:center; padding:20px; color:#94A3B8;">Loading top titles...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Netflix Big Data Analytics{% endblock %}</title>
+  
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- Left Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <a href="/" class="brand-logo">
+        <svg viewBox="0 0 111 30" fill="#E50914">
+          <path d="M105.062 14.28L111 30c-1.75-.25-3.499-.563-5.28-.845l-3.345-8.686-3.437 7.969c-1.687-.282-3.344-.376-5.031-.595l6.042-13.75-5.813-14.125h5.032l3.438 8.78 3.531-8.78h5.032l-6.141 14.312zM73.78 0h5.033v28.844c-1.688.125-3.376.219-5.032.375V0zm18.375 0h5.032v29.438c-1.688.093-3.344.25-5.032.406V0zM61.812 0h14.407v4.5H66.844v7.719h8.719v4.5h-8.719v8.031c-1.688.188-3.344.375-5.032.594V0zm-15.093 0h13.937v4.5h-8.906v7.719h8.219v4.5h-8.219v8.719c-1.687.281-3.343.5-5.031.75V0zM22.5 0h5.031v24.344c3.469-.5 6.969-.875 10.469-1.25V27.5c-5.188.563-10.375 1.25-15.5 2.063V0zm-17.5 0h5.031v29.438c-1.687.312-3.343.687-5.031 1.093V0z"/>
+        </svg>
+        <span class="brand-title">ANALYTICS <span class="brand-badge">BIG DATA</span></span>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Core Intelligence</div>
+      <a href="/dashboard" class="nav-link {% if active_page == 'dashboard' %}active{% endif %}">
+        <span class="nav-icon">📊</span> Executive Dashboard
+      </a>
+      <a href="/genres" class="nav-link {% if active_page == 'genres' %}active{% endif %}">
+        <span class="nav-icon">🎭</span> Genre Analysis
+      </a>
+      <a href="/ratings" class="nav-link {% if active_page == 'ratings' %}active{% endif %}">
+        <span class="nav-icon">⭐</span> Rating Analysis
+      </a>
+      <a href="/releases" class="nav-link {% if active_page == 'releases' %}active{% endif %}">
+        <span class="nav-icon">📅</span> Release Trends
+      </a>
+      <a href="/countries" class="nav-link {% if active_page == 'countries' %}active{% endif %}">
+        <span class="nav-icon">🌍</span> Country Analysis
+      </a>
+      <a href="/movies" class="nav-link {% if active_page == 'movies' %}active{% endif %}">
+        <span class="nav-icon">🔍</span> Movie Explorer
+      </a>
+
+      <div class="nav-section-title">Infrastructure & Tech</div>
+      <a href="/pipeline" class="nav-link {% if active_page == 'pipeline' %}active{% endif %}">
+        <span class="nav-icon">⚙️</span> Data Pipeline & Status
+      </a>
+      <a href="/database" class="nav-link {% if active_page == 'database' %}active{% endif %}">
+        <span class="nav-icon">🍃</span> MongoDB Database
+      </a>
+      <a href="/about" class="nav-link {% if active_page == 'about' %}active{% endif %}">
+        <span class="nav-icon">ℹ️</span> About & Viva Guide
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div>Hadoop • Hive • Python • MongoDB</div>
+      <div style="color:#64748B; margin-top:2px;">Deployed via Flask & Vercel</div>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div>
+          <div class="page-title">{% block page_title %}Netflix & Movie Analytics{% endblock %}</div>
+          <div class="page-subtitle">{% block page_subtitle %}Large-Scale Entertainment Big Data Analytics{% endblock %}</div>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <div id="top-mongo-status" class="status-pill status-connected">
+          <span class="status-dot"></span> MongoDB: Checking...
+        </div>
+        <div id="top-pipeline-status" class="status-pill status-connected">
+          <span class="status-dot"></span> Pipeline: Ready
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Body Area -->
+    <main class="content-area">
+
+      <!-- Global Filter Toolbar (Shown on Analytics & Explorer pages) -->
+      {% if active_page in ['dashboard', 'genres', 'ratings', 'releases', 'countries', 'movies'] %}
+      <div class="filter-card">
+        <div class="filter-grid">
+          <div class="form-group">
+            <label class="form-label" for="filter-year">Release Year</label>
+            <select id="filter-year" class="form-select">
+              <option value="All">All Years</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="filter-type">Format Type</label>
+            <select id="filter-type" class="form-select">
+              <option value="All">All Formats</option>
+              <option value="Movie">Movies Only</option>
+              <option value="TV Show">TV Shows Only</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="filter-genre">Genre Category</label>
+            <select id="filter-genre" class="form-select">
+              <option value="All">All Genres</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="filter-country">Origin Country</label>
+            <select id="filter-country" class="form-select">
+              <option value="All">All Countries</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="filter-rating">Maturity Rating</label>
+            <select id="filter-rating" class="form-select">
+              <option value="All">All Ratings</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="min-width: 180px;">
+            <label class="form-label" for="filter-search">Search Keyword</label>
+            <input type="text" id="filter-search" class="form-control" placeholder="Title, cast, plot...">
+          </div>
+
+          <div>
+            <button id="btn-apply-filters" class="btn btn-primary">
+              ⚡ Apply
+            </button>
+          </div>
+
+          <div>
+            <button id="btn-reset-filters" class="btn btn-secondary">
+              🔄 Reset
+            </button>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Child Page Content -->
+      {% block content %}{% endblock %}
+
+    </main>
+  </div>
+
+  <!-- Global Detail Modal (for Movie Explorer) -->
+  <div id="movie-modal" class="modal-overlay" onclick="if(event.target === this) closeModal()">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <div id="modal-body-content"></div>
+    </div>
+  </div>
+
+  <!-- Global JavaScript Controller -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block scripts %}{% endblock %}
+
+</body>
+</html>

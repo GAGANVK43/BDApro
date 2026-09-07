@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Genre Analysis | Netflix Big Data Analytics{% endblock %}
+{% block page_title %}🎭 Genre Intelligence & Analytics{% endblock %}
+{% block page_subtitle %}Multi-Genre Frequency, Format Split & Rating Quality Comparisons{% endblock %}
+
+{% block content %}
+<div class="charts-grid">
+  <div class="chart-card">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title">🎭 Genre Volume by Content Format</div>
+        <div class="chart-subtitle">Movies vs TV Shows across major genres</div>
+      </div>
+    </div>
+    <div class="chart-body">
+      <canvas id="genre-breakdown-chart"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title">⭐ Average Rating Score by Genre</div>
+        <div class="chart-subtitle">Quality score comparisons across entertainment categories</div>
+      </div>
+    </div>
+    <div class="chart-body">
+      <canvas id="genre-rating-chart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <div>
+      <div class="chart-title">📊 Genre Aggregation Data Matrix</div>
+      <div class="chart-subtitle">Detailed breakdown of content volume and ratings</div>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Genre Category</th>
+          <th>Total Titles</th>
+          <th>Movies</th>
+          <th>TV Shows</th>
+          <th>Average Rating</th>
+        </tr>
+      </thead>
+      <tbody id="genre-tbody">
+        <tr><td colspan="6" style="text-align:center; padding:20px; color:#94A3B8;">Loading genre matrix...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/genres.js') }}"></script>
+{% endblock %}

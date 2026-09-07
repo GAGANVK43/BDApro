@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}About Project & Viva Guide | Netflix Big Data Analytics{% endblock %}
+{% block page_title %}ℹ️ Project Documentation & Faculty Viva Guide{% endblock %}
+{% block page_subtitle %}Academic Justifications, Architectural Rationale & Expected Faculty Q&A{% endblock %}
+
+{% block content %}
+<!-- Project Summary Cards -->
+<div class="chart-card" style="margin-bottom:24px;">
+  <div class="chart-header">
+    <div>
+      <div class="chart-title">📌 Problem Statement & Objective</div>
+      <div class="chart-subtitle">Why large-scale entertainment catalog processing requires modern Big Data architecture</div>
+    </div>
+  </div>
+  <p style="font-size:0.9rem; color:#CBD5E1; line-height:1.6; margin-bottom:12px;">
+    Modern streaming platforms like Netflix and Amazon Prime manage massive entertainment catalogs containing hundreds of thousands of titles produced across global film markets. Analyzing this data involves unnesting multi-valued dimensions (such as co-directors, comma-separated genres, and multi-country co-productions) over millions of records.
+  </p>
+  <p style="font-size:0.9rem; color:#CBD5E1; line-height:1.6;">
+    <strong>Project Objective:</strong> Build an end-to-end distributed Big Data pipeline that utilizes <strong>Hadoop HDFS</strong> for scalable distributed storage, <strong>Apache Hive</strong> for SQL-on-Hadoop aggregations, <strong>MongoDB Atlas</strong> for flexible document and statistics persistence, and <strong>Flask + Chart.js</strong> for deploying a high-performance web dashboard to <strong>Vercel</strong>.
+  </p>
+</div>
+
+<!-- Technology Matrix Table -->
+<div class="chart-card" style="margin-bottom:24px;">
+  <div class="chart-header">
+    <div>
+      <div class="chart-title">🛠️ Technology Stack & Architectural Justifications</div>
+      <div class="chart-subtitle">Why each technology was chosen for this platform</div>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Technology</th>
+          <th>Role in System</th>
+          <th>Academic & Industry Rationale</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:700; color:#F59E0B;">Apache Hadoop (HDFS)</td>
+          <td>Distributed Storage Lake</td>
+          <td>Fault-tolerant, linearly scalable block storage for massive raw and cleaned CSV/ORC files across cluster nodes.</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700; color:#F59E0B;">Apache Hive</td>
+          <td>SQL-on-Hadoop Warehouse</td>
+          <td>Compiles declarative SQL queries into distributed MapReduce/Tez execution plans using <code>LATERAL VIEW explode()</code>.</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700; color:#10B981;">MongoDB Atlas</td>
+          <td>NoSQL Document Store</td>
+          <td>Schema-free JSON model natively storing nested arrays (<code>genres: []</code>, <code>country: []</code>) with sub-second OLTP query latencies.</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700; color:#06B6D4;">Python 3.x</td>
+          <td>Data Engineering & Glue</td>
+          <td>Automated deduplication, regex duration parsing, null imputation, and PyMongo bridging.</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700; color:#E50914;">Flask</td>
+          <td>REST API & Web Backend</td>
+          <td>Lightweight, production-proven micro-framework suitable for serverless deployment on Vercel.</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700; color:#8B5CF6;">Chart.js & HTML5</td>
+          <td>Interactive Visualizations</td>
+          <td>Hardware-accelerated canvas charts offering instant filtering without full-page reloads.</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700; color:#EC4899;">Vercel</td>
+          <td>Serverless Cloud Hosting</td>
+          <td>Edge deployment for the Flask frontend/API connected securely to cloud MongoDB Atlas.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Viva Voce Q&A -->
+<div class="chart-card" style="margin-bottom:24px;">
+  <div class="chart-header">
+    <div>
+      <div class="chart-title">🎓 Expected Faculty Viva Voce Questions & Answers</div>
+      <div class="chart-subtitle">Key technical explanations for academic project review</div>
+    </div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:16px;">
+    <div style="background:#0F172A; padding:16px; border-radius:8px; border-left:3px solid #E50914;">
+      <h4 style="color:#fff; font-size:0.95rem; margin-bottom:6px;">Q1: Why use Hadoop HDFS when data can be stored directly in MongoDB?</h4>
+      <p style="font-size:0.85rem; color:#CBD5E1; line-height:1.5;">
+        <strong>Answer:</strong> HDFS acts as the central distributed Data Lake designed for high-throughput batch writes and long-term immutable raw storage (OLAP). MongoDB acts as the operational database (OLTP) holding processed, indexed documents and pre-calculated statistics for fast user-facing web queries.
+      </p>
+    </div>
+
+    <div style="background:#0F172A; padding:16px; border-radius:8px; border-left:3px solid #06B6D4;">
+      <h4 style="color:#fff; font-size:0.95rem; margin-bottom:6px;">Q2: How does Hive handle multi-valued comma-separated fields like genres?</h4>
+      <p style="font-size:0.85rem; color:#CBD5E1; line-height:1.5;">
+        <strong>Answer:</strong> In <code>hive/genre_analysis.hql</code>, we use Hive's <code>LATERAL VIEW explode(split(listed_in, ','))</code> syntax. This flattens the comma-separated strings into individual records, allowing standard SQL <code>GROUP BY</code> and <code>COUNT()</code> operations.
+      </p>
+    </div>
+
+    <div style="background:#0F172A; padding:16px; border-radius:8px; border-left:3px solid #10B981;">
+      <h4 style="color:#fff; font-size:0.95rem; margin-bottom:6px;">Q3: How does the architecture work between local processing and Vercel cloud deployment?</h4>
+      <p style="font-size:0.85rem; color:#CBD5E1; line-height:1.5;">
+        <strong>Answer:</strong> Hadoop and Hive run in the data engineering environment to clean and aggregate the large dataset. The resulting processed records and collections are ingested into MongoDB Atlas. The Flask application is deployed to Vercel, querying MongoDB Atlas directly via PyMongo without needing a live Hadoop node on the web edge.
+      </p>
+    </div>
+
+    <div style="background:#0F172A; padding:16px; border-radius:8px; border-left:3px solid #F59E0B;">
+      <h4 style="color:#fff; font-size:0.95rem; margin-bottom:6px;">Q4: What data cleaning operations are performed by Python?</h4>
+      <p style="font-size:0.85rem; color:#CBD5E1; line-height:1.5;">
+        <strong>Answer:</strong> <code>python/data_cleaning.py</code> eliminates duplicate entries by title and year, imputes null directors and casts with 'Unknown', normalizes maturity ratings to official standards (TV-MA, PG-13), parses durations into numeric values and units, and extracts primary countries and genres for fast indexing.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Future Scope -->
+<div class="chart-card">
+  <div class="chart-title" style="margin-bottom:10px;">🔮 Future Enhancements & Scope</div>
+  <ul style="color:#CBD5E1; font-size:0.88rem; line-height:1.6; padding-left:20px;">
+    <li><strong>PySpark ML Recommendation Engine:</strong> Content-based recommendation filtering using TF-IDF and Cosine Similarity on plot synopses.</li>
+    <li><strong>Real-Time Stream Ingestion:</strong> Integrating Apache Kafka with MongoDB Time-Series collections for live streaming telemetry.</li>
+    <li><strong>Audience Sentiment NLP:</strong> Scraping external viewer reviews from IMDb/Rotten Tomatoes and applying RoBERTa sentiment analysis.</li>
+  </ul>
+</div>
+{% endblock %}
