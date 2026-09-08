@@ -27,9 +27,15 @@ app.config["JSON_SORT_KEYS"] = False
 # Register Blueprints
 from api.routes import views_bp
 from api.analytics_routes import api_bp
+from flask import send_from_directory
 
 app.register_blueprint(views_bp)
 app.register_blueprint(api_bp)
+
+# Direct static route handler for Vercel serverless environment
+@app.route("/static/<path:filename>")
+def serve_static(filename):
+    return send_from_directory(str(BASE_DIR / "static"), filename)
 
 
 # Error Handlers
