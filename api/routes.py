@@ -3,7 +3,7 @@ routes.py - Flask Web Page View Routes
 Renders Jinja2 HTML templates for each section of the analytics platform.
 """
 
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect, url_for
 
 views_bp = Blueprint("views", __name__)
 
@@ -59,5 +59,5 @@ def database_view():
 
 @views_bp.route("/about")
 def about_view():
-    """About Project, Architecture & Faculty Viva Voce Guide."""
-    return render_template("about.html", active_page="about")
+    """Redirect to main dashboard."""
+    return redirect(url_for("views.dashboard_view"))
