@@ -9,10 +9,11 @@
 <div class="kpi-grid">
   <div class="kpi-card">
     <div class="kpi-header">
-      <span class="kpi-title">Total Content</span>
+      <span class="kpi-title">Total Catalog</span>
       <span class="kpi-icon">🎬</span>
     </div>
     <div id="kpi-total" class="kpi-value">--</div>
+    <div class="kpi-subtext">Total Processed Records</div>
   </div>
 
   <div class="kpi-card blue">
@@ -21,6 +22,7 @@
       <span class="kpi-icon">🎥</span>
     </div>
     <div id="kpi-movies" class="kpi-value">--</div>
+    <div class="kpi-subtext" id="kpi-movie-share">Feature Films</div>
   </div>
 
   <div class="kpi-card green">
@@ -29,30 +31,34 @@
       <span class="kpi-icon">📺</span>
     </div>
     <div id="kpi-tv" class="kpi-value">--</div>
+    <div class="kpi-subtext" id="kpi-tv-share">Episodic Series</div>
   </div>
 
   <div class="kpi-card amber">
     <div class="kpi-header">
-      <span class="kpi-title">Avg Rating</span>
+      <span class="kpi-title">Avg Quality Score</span>
       <span class="kpi-icon">⭐</span>
     </div>
     <div id="kpi-rating" class="kpi-value">--</div>
+    <div class="kpi-subtext">Normalized (1 - 10 Scale)</div>
   </div>
 
   <div class="kpi-card purple">
     <div class="kpi-header">
-      <span class="kpi-title">Countries</span>
+      <span class="kpi-title">Origin Countries</span>
       <span class="kpi-icon">🌍</span>
     </div>
     <div id="kpi-countries" class="kpi-value">--</div>
+    <div class="kpi-subtext">Global Production Hubs</div>
   </div>
 
   <div class="kpi-card">
     <div class="kpi-header">
-      <span class="kpi-title">Genres</span>
+      <span class="kpi-title">Active Genres</span>
       <span class="kpi-icon">🎭</span>
     </div>
     <div id="kpi-genres" class="kpi-value">--</div>
+    <div class="kpi-subtext">Unique Categories</div>
   </div>
 </div>
 
@@ -157,16 +163,17 @@
         <tr>
           <th>Title</th>
           <th>Format</th>
-          <th>Year</th>
+          <th>Release Year</th>
           <th>Maturity</th>
           <th>Rating Score</th>
           <th>Primary Genre</th>
           <th>Country</th>
           <th>Duration</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody id="top-movies-tbody">
-        <tr><td colspan="8" style="text-align:center; padding:20px; color:#94A3B8;">Loading top titles...</td></tr>
+        <tr><td colspan="9" style="text-align:center; padding:20px; color:#94A3B8;">Loading top titles...</td></tr>
       </tbody>
     </table>
   </div>
